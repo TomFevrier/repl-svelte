@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type='module'>
+			let component;
+
+			const update = (source) => {
+				const blob = new Blob([source], { type: 'text/javascript' });
+				const url = URL.createObjectURL(blob);
+
+				import(url).then(({ default: App }) => {
+					if (component) {
+						component.$destroy();
+					}
+					document.body.innerHTML = '';
+					component = new App({
+						target: document.body
+					});
+				})
+			}
+
+			window.addEventListener('message', (e) => {
+				update(e.data)
+			}, false);
+		</script>
+	</head>
+	<body></body>
+</html>
